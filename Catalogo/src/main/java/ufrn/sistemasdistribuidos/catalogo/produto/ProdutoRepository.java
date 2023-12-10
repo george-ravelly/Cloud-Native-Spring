@@ -1,2 +1,6 @@
-package ufrn.sistemasdistribuidos.catalogo.produto;public interface ProdutoRepository {
+package ufrn.sistemasdistribuidos.catalogo.produto;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 }
