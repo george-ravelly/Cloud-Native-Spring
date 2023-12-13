@@ -41,6 +41,10 @@ public class Produto {
         this.categoria = categoria;
     }
 
+    public Produto() {
+
+    }
+
     public Long getCod() {
         return cod;
     }
