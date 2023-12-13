@@ -1,9 +1,6 @@
 package ufrn.sistemasdistribuidos.catalogo.produto;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,13 +13,19 @@ public class ProdutoController {
         this.service = service;
     }
 
+    @PostMapping
+    public Produto save(@RequestBody Produto produto) {
+        return service.save(produto);
+    }
+
     @GetMapping
     public List<Produto> getAll() {
-        return List.of();
+        return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public Produto getById(@PathVariable Long id) {
-        return new Produto();
+    public ProdutoDTO getById(@PathVariable Long id) {
+        return service.getById(id);
     }
+
 }
