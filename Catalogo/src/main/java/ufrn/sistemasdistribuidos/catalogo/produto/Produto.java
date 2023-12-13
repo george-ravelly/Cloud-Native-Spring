@@ -1,6 +1,7 @@
 package ufrn.sistemasdistribuidos.catalogo.produto;
 
 import jakarta.persistence.*;
+import ufrn.sistemasdistribuidos.catalogo.marca.Marca;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -11,41 +12,41 @@ public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "nome_id", sequenceName = "prod_seq_id", allocationSize = 1)
-    private Long id;
+    private Long cod;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
     private String nome;
     private double preco;
     private String descricao;
+    @OneToOne
+    private Marca marca;
     private Categoria categoria;
-    public Produto(Long id, String nome, double preco, String descricao, Categoria categoria) {
-        this.id = id;
+    public Produto(Long cod, String nome, double preco, String descricao, Marca marca, Categoria categoria) {
+        this.cod = cod;
         this.nome = nome;
         this.preco = preco;
         this.descricao = descricao;
+        this.marca = marca;
         this.categoria = categoria;
     }
 
-    public Produto(Long id, LocalDateTime dataCriacao, LocalDateTime dataModificacao, String nome, double preco, String descricao, Categoria categoria) {
-        this.id = id;
+    public Produto(Long cod, LocalDateTime dataCriacao, LocalDateTime dataModificacao, String nome, double preco, String descricao, Marca marca, Categoria categoria) {
+        this.cod = cod;
         this.dataCriacao = dataCriacao;
         this.dataModificacao = dataModificacao;
         this.nome = nome;
         this.preco = preco;
         this.descricao = descricao;
+        this.marca = marca;
         this.categoria = categoria;
     }
 
-    public Produto() {
-        // Construtor padrão
+    public Long getCod() {
+        return cod;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setCod(Long cod) {
+        this.cod = cod;
     }
 
     public LocalDateTime getDataCriacao() {
@@ -62,6 +63,14 @@ public class Produto {
 
     public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
+    }
+
+    public Marca getMarca() {
+        return marca;
+    }
+
+    public void setMarca(Marca marca) {
+        this.marca = marca;
     }
 
     public String getNome() {
