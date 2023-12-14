@@ -1,13 +1,12 @@
 package ufrn.sistemasdistribuidos.catalogo.estoque;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 import ufrn.sistemasdistribuidos.catalogo.produto.Produto;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "estoque")
 public class Estoque {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,8 +14,17 @@ public class Estoque {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
     private long quantidade;
-    @JoinColumn
+    @OneToOne
+    @JoinColumn(name = "produto_cod")
     private Produto produto;
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
 
     public Estoque(Long id, long quantidade, Produto produto) {
         this.id = id;
@@ -25,4 +33,36 @@ public class Estoque {
     }
 
     public Estoque() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public LocalDateTime getDataModificacao() {
+        return dataModificacao;
+    }
+
+    public void setDataModificacao(LocalDateTime dataModificacao) {
+        this.dataModificacao = dataModificacao;
+    }
+
+    public long getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(long quantidade) {
+        this.quantidade = quantidade;
+    }
 }

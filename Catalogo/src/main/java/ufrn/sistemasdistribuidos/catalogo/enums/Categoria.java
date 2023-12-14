@@ -1,4 +1,4 @@
-package ufrn.sistemasdistribuidos.catalogo.produto;
+package ufrn.sistemasdistribuidos.catalogo.enums;
 
 public enum Categoria {
     ELETRONICOS,

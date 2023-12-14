@@ -2,6 +2,8 @@ package ufrn.sistemasdistribuidos.catalogo.produto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ufrn.sistemasdistribuidos.catalogo.dto.MarcaDTO;
+import ufrn.sistemasdistribuidos.catalogo.dto.ProdutoDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,9 +38,14 @@ public class ProdutoService {
             throw new RuntimeException("Produto não encontrado!");
         } else {
             return new ProdutoDTO(
+                    produtoOptional.get().getCod(),
                     produtoOptional.get().getNome(),
                     produtoOptional.get().getDescricao(),
-                    produtoOptional.get().getPreco()
+                    produtoOptional.get().getPreco(),
+                    new MarcaDTO(
+                            produtoOptional.get().getMarca().getCod(),
+                            produtoOptional.get().getMarca().getNome()
+                    )
             );
         }
     }

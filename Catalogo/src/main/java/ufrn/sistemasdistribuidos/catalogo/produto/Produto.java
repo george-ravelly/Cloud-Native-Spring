@@ -1,12 +1,11 @@
 package ufrn.sistemasdistribuidos.catalogo.produto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import ufrn.sistemasdistribuidos.catalogo.enums.Categoria;
 import ufrn.sistemasdistribuidos.catalogo.marca.Marca;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Objects;
 
 @Entity

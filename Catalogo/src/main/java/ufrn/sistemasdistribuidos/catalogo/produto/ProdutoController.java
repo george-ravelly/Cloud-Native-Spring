@@ -1,6 +1,7 @@
 package ufrn.sistemasdistribuidos.catalogo.produto;
 
 import org.springframework.web.bind.annotation.*;
+import ufrn.sistemasdistribuidos.catalogo.dto.ProdutoDTO;
 
 import java.util.List;
 
@@ -18,14 +19,19 @@ public class ProdutoController {
         return service.save(produto);
     }
 
+    @PutMapping
+    public Produto update(@RequestBody Produto produto) {
+        return service.update(produto);
+    }
+
     @GetMapping
     public List<Produto> getAll() {
         return service.getAll();
     }
 
-    @GetMapping("/{id}")
-    public ProdutoDTO getById(@PathVariable Long id) {
-        return service.getById(id);
+    @GetMapping("/{codigo}")
+    public ProdutoDTO getByCod(@PathVariable Long codigo) {
+        return service.getById(codigo);
     }
 
 }
