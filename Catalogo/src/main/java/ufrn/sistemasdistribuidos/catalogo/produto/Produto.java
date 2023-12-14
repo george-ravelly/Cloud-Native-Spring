@@ -1,9 +1,12 @@
 package ufrn.sistemasdistribuidos.catalogo.produto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import ufrn.sistemasdistribuidos.catalogo.marca.Marca;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -17,7 +20,9 @@ public class Produto {
     private String nome;
     private double preco;
     private String descricao;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "marca_cod")
+    @JsonBackReference
     private Marca marca;
     private Categoria categoria;
     public Produto(Long cod, String nome, double preco, String descricao, Marca marca, Categoria categoria) {
