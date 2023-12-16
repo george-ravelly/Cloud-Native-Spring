@@ -1,6 +1,7 @@
-package ufrn.sistemasdistribuidos.catalogo.estoque;
+package ufrn.cloud.estoque.estoque;
 
 import org.springframework.web.bind.annotation.*;
+import ufrn.cloud.estoque.dto.EstoqueDTO;
 
 import java.util.List;
 
@@ -30,12 +31,7 @@ public class EstoqueController {
     }
 
     @GetMapping("/produto/{cod}")
-    public Estoque getByProdutoCod(@PathVariable Long cod) {
+    public EstoqueDTO getByProdutoCod(@PathVariable Long cod) {
         return service.getByProdutoCod(cod);
-    }
-
-    @GetMapping("/produto")
-    public List<Estoque> getAllByProdutoNome (@RequestParam("nome") String nome) {
-        return service.searchByNome(nome);
     }
 }

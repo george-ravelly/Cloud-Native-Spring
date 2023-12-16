@@ -1,11 +1,11 @@
 spring:
   application:
-    name: pedido
+    name: estoque
   datasource:
     driverClassName: org.postgresql.Driver
     username: postgres
     password: 1234
-    url: jdbc:postgresql://localhost:5432/pedido?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/estoque?createDatabaseIfNotExist=true
   jpa:
     generate-ddl: true
     show-sql: true
@@ -17,3 +17,5 @@ spring:
     active: ${PROFILE:dev}
   config:
     import: optional:configserver:${CONFIG_SERVER_URI:http://localhost:8888}
+server:
+  port: 8085

@@ -37,6 +37,7 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
+            <version>42.6.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
         <dependency>

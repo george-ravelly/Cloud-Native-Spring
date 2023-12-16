@@ -1,7 +1,6 @@
-package ufrn.sistemasdistribuidos.catalogo.estoque;
+package ufrn.cloud.estoque.estoque;
 
 import jakarta.persistence.*;
-import ufrn.sistemasdistribuidos.catalogo.produto.Produto;
 
 import java.time.LocalDateTime;
 
@@ -14,22 +13,20 @@ public class Estoque {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
     private long quantidade;
-    @OneToOne
-    @JoinColumn(name = "produto_cod")
-    private Produto produto;
+    private Long codigoProduto;
 
-    public Produto getProduto() {
-        return produto;
+    public Long getProduto() {
+        return codigoProduto;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setProduto(Long produto) {
+        this.codigoProduto = produto;
     }
 
-    public Estoque(Long id, long quantidade, Produto produto) {
+    public Estoque(Long id, long quantidade, Long produto) {
         this.id = id;
         this.quantidade = quantidade;
-        this.produto = produto;
+        this.codigoProduto = produto;
     }
 
     public Estoque() {}

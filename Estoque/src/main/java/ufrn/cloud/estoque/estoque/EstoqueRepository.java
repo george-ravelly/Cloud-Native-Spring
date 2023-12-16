@@ -1,4 +1,4 @@
-package ufrn.sistemasdistribuidos.catalogo.estoque;
+package ufrn.cloud.estoque.estoque;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface EstoqueRepository extends JpaRepository<Estoque, Long> {
-    Optional<Estoque> findByProduto_Cod(Long cod);
+    Optional<Estoque> findByCodigoProduto(Long cod);
 
     @Query(
         value = "SELECT * FROM estoque e WHERE e.quantidade > 0",
@@ -18,5 +18,5 @@ public interface EstoqueRepository extends JpaRepository<Estoque, Long> {
     )
     List<Estoque> findAllByQuantidadeMaiorZero();
 
-    List<Estoque> findAllByProduto_Nome(@Param("nome") String nome);
+    boolean existsAllByCodigoProdutoNotIn(List<Long> codes);
 }

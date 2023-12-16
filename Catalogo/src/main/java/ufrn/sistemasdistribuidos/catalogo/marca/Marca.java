@@ -3,11 +3,13 @@ package ufrn.sistemasdistribuidos.catalogo.marca;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import ufrn.sistemasdistribuidos.catalogo.produto.Produto;
 
 import java.util.List;
 
 @Entity
+@Table(name = "marca")
 public class Marca {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
