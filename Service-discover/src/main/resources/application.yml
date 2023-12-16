@@ -2,6 +2,8 @@
 spring:
   application:
     name: service-discover
+  profiles:
+    active: ${PROFILE:dev}
   config:
     import: optional:configserver:http://localhost:8888
 server:
