@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/Service-discover/pom.xml" />
         <option value="$PROJECT_DIR$/Estoque/pom.xml" />
         <option value="$PROJECT_DIR$/Gateway-service/pom.xml" />
+        <option value="$PROJECT_DIR$/Usuario/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
