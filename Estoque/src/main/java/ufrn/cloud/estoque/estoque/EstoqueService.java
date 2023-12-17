@@ -3,6 +3,8 @@ package ufrn.cloud.estoque.estoque;
 import org.springframework.stereotype.Service;
 import ufrn.cloud.estoque.dto.EstoqueDTO;
 import ufrn.cloud.estoque.dto.ProdutoDTO;
+import ufrn.cloud.estoque.exceptions.BadRequestException;
+import ufrn.cloud.estoque.exceptions.NotFoundException;
 import ufrn.cloud.estoque.request.CatalogoWebClient;
 
 import java.time.LocalDateTime;
@@ -23,14 +25,16 @@ public class EstoqueService {
         estoque.setDataCriacao(LocalDateTime.now());
         Optional<Estoque> estoque1 = repository.findByCodigoProduto(estoque.getCodigoProduto());
         if (estoque1.isPresent()) {
-            throw new RuntimeException("Produto já esta cadastrado no estoque!");
+            throw new BadRequestException("Produto já esta cadastrado no estoque!");
         }
         return repository.save(estoque);
     }
 
     public Estoque update(Estoque estoque) {
         Optional<Estoque> estoque1 = repository.findByCodigoProduto(estoque.getCodigoProduto());
-        if (estoque1.isEmpty()) throw new RuntimeException("Produto não esta cadastrado no estoque!");
+        if (estoque1.isEmpty()) {
+            throw new BadRequestException("Produto não esta cadastrado no estoque!");
+        }
         estoque1.get().setQuantidade(estoque.getQuantidade());
         estoque1.get().setDataModificacao(LocalDateTime.now());
         return repository.save(estoque1.get());
@@ -47,12 +51,12 @@ public class EstoqueService {
     public EstoqueDTO getByProdutoCod(Long produtoCod) {
         Optional<ProdutoDTO> produto = catalogoWebClient.getProdutoByCod(produtoCod);
         if (produto.isEmpty()) {
-            throw new RuntimeException("Produto não encontrado!");
+            throw new NotFoundException("Produto não encontrado!");
         }
 
         Optional<Estoque> estoqueOptional = repository.findByCodigoProduto(produto.get().cod());
         if (estoqueOptional.isEmpty()) {
-            throw new RuntimeException("Produto fora do estoque!");
+            throw new BadRequestException("Produto fora do estoque!");
         } else {
             return new EstoqueDTO(
                     estoqueOptional.get().getDataModificacao() != null ? estoqueOptional.get().getDataModificacao() : estoqueOptional.get().getDataCriacao(),

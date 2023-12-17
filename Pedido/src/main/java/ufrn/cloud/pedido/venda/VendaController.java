@@ -1,9 +1,12 @@
 package ufrn.cloud.pedido.venda;
 
 import org.springframework.web.bind.annotation.*;
+import ufrn.cloud.pedido.itemVenda.ItemVenda;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/venda")
+@RequestMapping("/")
 public class VendaController {
     private final VendaService service;
 
@@ -12,16 +15,16 @@ public class VendaController {
     }
 
     @PostMapping
-    public Venda save(Venda venda) {
-        return service.save(venda);
+    public Venda save(@RequestBody List<ItemVenda> items) {
+        return service.save(items);
     }
 
     @PutMapping
-    public Venda update(Venda venda) {
-        return service.save(venda);
+    public Venda update(@RequestBody Venda venda) {
+        return service.update(venda);
     }
 
-    @GetMapping("{codigo}")
+    @GetMapping("/{codigo}")
     public Venda getByCodigo(@PathVariable(name = "codigo") Long id) {
         return service.getById(id);
     }

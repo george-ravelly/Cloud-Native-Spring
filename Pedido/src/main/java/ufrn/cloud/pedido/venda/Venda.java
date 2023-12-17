@@ -20,16 +20,16 @@ public class Venda {
     private Status status;
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<ItemVenda> itemVendas;
+    private List<ItemVenda> itensVenda;
 
-    public Venda(Long id, Long userId, LocalDateTime dataCriacao, LocalDateTime dataModificacao, double valorTotal, Status status, List<ItemVenda> itemVendas) {
+    public Venda(Long id, Long userId, LocalDateTime dataCriacao, LocalDateTime dataModificacao, double valorTotal, Status status, List<ItemVenda> itensVenda) {
         this.id = id;
         this.userId = userId;
         this.dataCriacao = dataCriacao;
         this.dataModificacao = dataModificacao;
         this.valorTotal = valorTotal;
         this.status = status;
-        this.itemVendas = itemVendas;
+        this.itensVenda = itensVenda;
     }
 
     public Venda() {
@@ -83,11 +83,11 @@ public class Venda {
         this.status = status;
     }
 
-    public List<ItemVenda> getItemVendas() {
-        return itemVendas;
+    public List<ItemVenda> getItensVenda() {
+        return itensVenda;
     }
 
-    public void setItemVendas(List<ItemVenda> itemVendas) {
-        this.itemVendas = itemVendas;
+    public void setItensVenda(List<ItemVenda> itensVenda) {
+        this.itensVenda = itensVenda;
     }
 }

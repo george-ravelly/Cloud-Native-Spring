@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ufrn.sistemasdistribuidos.catalogo.dto.MarcaDTO;
 import ufrn.sistemasdistribuidos.catalogo.dto.ProdutoDTO;
+import ufrn.sistemasdistribuidos.catalogo.exceptions.BadRequestException;
+import ufrn.sistemasdistribuidos.catalogo.exceptions.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +26,9 @@ public class ProdutoService {
     }
 
     public Produto update (Produto produto) {
+        if (produto.getCod() == null) {
+            throw new BadRequestException("Código do produto não informado!");
+        }
         produto.setDataModificacao(LocalDateTime.now());
         return repository.save(produto);
     }
@@ -35,7 +40,7 @@ public class ProdutoService {
     public ProdutoDTO getById(Long id) {
         Optional<Produto> produtoOptional = repository.findById(id);
         if (produtoOptional.isEmpty()) {
-            throw new RuntimeException("Produto não encontrado!");
+            throw new NotFoundException("Produto não encontrado!");
         } else {
             return new ProdutoDTO(
                     produtoOptional.get().getCod(),

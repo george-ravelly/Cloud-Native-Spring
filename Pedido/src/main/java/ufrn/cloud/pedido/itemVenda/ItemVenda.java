@@ -13,9 +13,9 @@ public class ItemVenda {
     private Long id;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
-    private Long quantidade;
+    private long quantidade;
     private double valorParcial;
-    private Long codigoProduto;
+    private long codigoProduto;
     @ManyToOne
     @JoinColumn(name = "venda_id")
     @JsonBackReference
@@ -29,7 +29,7 @@ public class ItemVenda {
         this.venda = venda;
     }
 
-    public ItemVenda(Long id, LocalDateTime dataCriacao, LocalDateTime dataModificacao, Long quantidade, double valorParcial, Long codigoProduto) {
+    public ItemVenda(Long id, LocalDateTime dataCriacao, LocalDateTime dataModificacao, long quantidade, double valorParcial, long codigoProduto) {
         this.id = id;
         this.dataCriacao = dataCriacao;
         this.dataModificacao = dataModificacao;
@@ -65,19 +65,19 @@ public class ItemVenda {
         this.dataModificacao = dataModificacao;
     }
 
-    public Long getQuantidade() {
+    public long getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(Long quantidade) {
+    public void setQuantidade(long quantidade) {
         this.quantidade = quantidade;
     }
 
-    public Long getCodigoProduto() {
+    public long getCodigoProduto() {
         return codigoProduto;
     }
 
-    public void setCodigoProduto(Long codigoProduto) {
+    public void setCodigoProduto(long codigoProduto) {
         this.codigoProduto = codigoProduto;
     }
 
