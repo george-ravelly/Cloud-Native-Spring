@@ -58,7 +58,7 @@ public class VendaService {
     public Venda getById(Long id) {
         Optional<Venda> vendaOptional = repository.findById(id);
         if (vendaOptional.isEmpty()) {
-            throw new RuntimeException("O pedido de número "+id+" não foi encontrado!");
+            throw new NotFoundException("O pedido de número "+id+" não foi encontrado!");
         } else {
             return vendaOptional.get();
         }
