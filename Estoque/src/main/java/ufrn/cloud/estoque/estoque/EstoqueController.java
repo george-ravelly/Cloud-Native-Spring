@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import ufrn.cloud.estoque.dto.EstoqueDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/produto")
@@ -22,6 +23,13 @@ public class EstoqueController {
     @PutMapping
     public Estoque update(@RequestBody Estoque estoque) {
         return service.update(estoque);
+    }
+
+    @PutMapping("/{cod}")
+    public Optional<Estoque> update(
+            @PathVariable("cod") Long cod,
+            @RequestBody long quantidade) {
+        return service.updateByIdAndQuantidade(cod, quantidade);
     }
 
     @GetMapping

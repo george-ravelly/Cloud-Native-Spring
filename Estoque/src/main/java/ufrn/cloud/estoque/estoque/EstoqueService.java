@@ -40,6 +40,20 @@ public class EstoqueService {
         return repository.save(estoque1.get());
     }
 
+    public Optional<Estoque> updateByIdAndQuantidade(Long id, long quantidade) {
+        Optional<Estoque> estoqueOptional = repository.findByCodigoProduto(id);
+        if (estoqueOptional.isEmpty()) throw new BadRequestException("Produto não foi encontrado!");
+        Estoque estoque = estoqueOptional.get();
+        if (quantidade <= 0) throw new BadRequestException("Quantidade de itens muito pequena!");
+        if (estoque.getQuantidade() - quantidade > 0) {
+            estoque.setQuantidade(estoque.getQuantidade() - quantidade);
+            estoque.setDataModificacao(LocalDateTime.now());
+            return Optional.of(repository.save(estoque));
+        } else {
+            throw new BadRequestException("Estoque insuficiente!");
+        }
+    }
+
     public List<Estoque> getAll() {
         return repository.findAll();
     }

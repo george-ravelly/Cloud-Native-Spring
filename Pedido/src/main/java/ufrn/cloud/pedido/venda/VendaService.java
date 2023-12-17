@@ -71,6 +71,18 @@ public class VendaService {
         if (venda.getId() == null) {
             throw new BadRequestException("Número do pedido não informado!");
         }
+        if (venda.getStatus() == Status.PROCESSANDO) {
+            venda.getItensVenda().forEach(item -> {
+                try {
+                     estoqueWebClient.updateQuantidadeByCod(
+                            item.getCodigoProduto(),
+                            item.getQuantidade()
+                    );
+                } catch (BadRequestException e) {
+                    System.out.println(e.getMessage());
+                }
+            });
+        }
         venda.setDataModificacao(LocalDateTime.now());
         return repository.save(venda);
     }
