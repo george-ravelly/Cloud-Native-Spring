@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Config-server" />
         <module name="Catalogo" />
+        <module name="Gateway-service" />
         <module name="Estoque" />
         <module name="Service-discover" />
         <module name="Pedido" />
@@ -23,6 +24,7 @@
       <module name="Catalogo" options="-parameters" />
       <module name="Config-server" options="-parameters" />
       <module name="Estoque" options="-parameters" />
+      <module name="Gateway-service" options="-parameters" />
       <module name="Pedido" options="-parameters" />
       <module name="Service-discover" options="-parameters" />
     </option>
