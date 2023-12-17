@@ -6,7 +6,7 @@ import ufrn.cloud.estoque.dto.EstoqueDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/estoque")
+@RequestMapping("/produto")
 public class EstoqueController {
     private final EstoqueService service;
 
@@ -25,12 +25,14 @@ public class EstoqueController {
     }
 
     @GetMapping
-    public List<Estoque> listarProdutosEmEstoque (@RequestParam("emEstoque") Boolean emEstoque) {
+    public List<Estoque> listarProdutosEmEstoque (
+            @RequestParam(name = "emEstoque", required = false, defaultValue = "false") Boolean emEstoque
+    ) {
         if (emEstoque) return service.getAllByQuantidadeMaiorZero();
         else return service.getAll();
     }
 
-    @GetMapping("/produto/{cod}")
+    @GetMapping("/{cod}")
     public EstoqueDTO getByProdutoCod(@PathVariable Long cod) {
         return service.getByProdutoCod(cod);
     }

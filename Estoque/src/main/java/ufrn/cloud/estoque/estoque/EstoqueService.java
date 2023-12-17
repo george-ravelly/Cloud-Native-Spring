@@ -21,12 +21,19 @@ public class EstoqueService {
 
     public Estoque save(Estoque estoque) {
         estoque.setDataCriacao(LocalDateTime.now());
+        Optional<Estoque> estoque1 = repository.findByCodigoProduto(estoque.getCodigoProduto());
+        if (estoque1.isPresent()) {
+            throw new RuntimeException("Produto já esta cadastrado no estoque!");
+        }
         return repository.save(estoque);
     }
 
     public Estoque update(Estoque estoque) {
-        estoque.setDataModificacao(LocalDateTime.now());
-        return repository.save(estoque);
+        Optional<Estoque> estoque1 = repository.findByCodigoProduto(estoque.getCodigoProduto());
+        if (estoque1.isEmpty()) throw new RuntimeException("Produto não esta cadastrado no estoque!");
+        estoque1.get().setQuantidade(estoque.getQuantidade());
+        estoque1.get().setDataModificacao(LocalDateTime.now());
+        return repository.save(estoque1.get());
     }
 
     public List<Estoque> getAll() {

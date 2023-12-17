@@ -13,23 +13,23 @@ public class Estoque {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
     private long quantidade;
-    private Long codigoProduto;
+    private long codigoProduto;
 
-    public Long getProduto() {
-        return codigoProduto;
-    }
-
-    public void setProduto(Long produto) {
-        this.codigoProduto = produto;
-    }
-
-    public Estoque(Long id, long quantidade, Long produto) {
+    public Estoque(Long id, long quantidade, long codigoProduto) {
         this.id = id;
         this.quantidade = quantidade;
-        this.codigoProduto = produto;
+        this.codigoProduto = codigoProduto;
     }
 
     public Estoque() {}
+
+    public long getCodigoProduto() {
+        return codigoProduto;
+    }
+
+    public void setCodigoProduto(long codigoProduto) {
+        this.codigoProduto = codigoProduto;
+    }
 
     public Long getId() {
         return id;

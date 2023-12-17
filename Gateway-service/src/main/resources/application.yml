@@ -11,11 +11,11 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-      routes:
-        - id: catalogo
-          uri: lb://CATALOGO
-          predicates:
-            - Path=/catalogo/**
+#      routes:
+#        - id: catalogo
+#          uri: lb://CATALOGO
+#          predicates:
+#            - Path=/catalogo/**
 
 logging:
   level:

@@ -15,7 +15,7 @@ public interface CatalogoWebClient {
     @LoadBalanced
     @RequestMapping(
             method = RequestMethod.GET,
-            value = "/catalogo/estoque/produto/{id}",
+            value = "/produto/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     Optional<ProdutoDTO> getProdutoByCod(@PathVariable("id") Long codigoProduto);
