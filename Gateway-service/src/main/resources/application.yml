@@ -11,15 +11,26 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-#      routes:
-#        - id: catalogo
-#          uri: lb://CATALOGO
-#          predicates:
-#            - Path=/catalogo/**
-
-logging:
-  level:
-    org:
-      springframework:
-        cloud:
-          gateway: DEBUG
+      routes:
+        - id: catalogo
+          uri: lb://CATALOGO
+          predicates:
+            - Path=/catalogo/**
+          filters:
+            - name: Retry
+              args:
+                retries: 100
+                statuses: BAD_GATEWAY
+                methods: GET,POST
+                backoff:
+                  firstBackoff: 10ms
+                  maxBackoff: 50ms
+                  factor: 2
+                  basedOnPreviousValues: false
+            - name: CircuitBreaker
+              args:
+                name: catalogocircuitbreaker
+                slidingWindowSize: 20
+                permittedNumberOfCallsInHalfOpenState: 5
+                failureRateThreshold: 50
+                waitDurationInOpenState: 10000
