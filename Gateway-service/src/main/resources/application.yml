@@ -11,26 +11,33 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-      routes:
-        - id: catalogo
-          uri: lb://CATALOGO
-          predicates:
-            - Path=/catalogo/**
-          filters:
-            - name: Retry
-              args:
-                retries: 100
-                statuses: BAD_GATEWAY
-                methods: GET,POST
-                backoff:
-                  firstBackoff: 10ms
-                  maxBackoff: 50ms
-                  factor: 2
-                  basedOnPreviousValues: false
-            - name: CircuitBreaker
-              args:
-                name: catalogocircuitbreaker
-                slidingWindowSize: 20
-                permittedNumberOfCallsInHalfOpenState: 5
-                failureRateThreshold: 50
-                waitDurationInOpenState: 10000
+      default-filters:
+        - name: CircuitBreaker
+          args:
+            name: requestcircuitbreaker
+            slidingWindowSize: 100
+            permittedNumberOfCallsInHalfOpenState: 20
+            failureRateThreshold: 50
+            waitDurationInOpenState: 5000
+        - name: Retry
+          args:
+            retries: 10
+            statuses: BAD_GATEWAY
+            methods: GET,POST
+            backoff:
+              firstBackoff: 10ms
+              maxBackoff: 50ms
+              factor: 2
+              basedOnPreviousValues: false
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter:
+              replenishRate: 400
+              burstCapacity: 450
+              requestedTokens: 1
+  data:
+    redis:
+      connect-timeout: 2s
+      host: localhost
+      port: 6379
+      timeout: 1s

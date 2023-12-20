@@ -1,5 +1,10 @@
 package ufrn.cloud.pedido.venda;
 
+import feign.FeignException;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ufrn.cloud.pedido.dto.ClienteDTO;
 import ufrn.cloud.pedido.dto.EstoqueDTO;
@@ -11,7 +16,9 @@ import ufrn.cloud.pedido.request.ClienteWebClient;
 import ufrn.cloud.pedido.request.EstoqueWebClient;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class VendaService {
@@ -19,12 +26,19 @@ public class VendaService {
     private final EstoqueWebClient estoqueWebClient;
     private final ClienteWebClient clienteWebClient;
 
+    private final Logger logger = Logger.getLogger(VendaService.class.getName());
+    private final Map<Long, ClienteDTO> CLIENTECACHE = new HashMap<>();
+    private final Map<Long, VendaDto> VENDASCACHE = new HashMap<>();
+
     public VendaService(VendaRepository repository, EstoqueWebClient estoqueWebClient, ClienteWebClient clienteWebClient) {
         this.repository = repository;
         this.estoqueWebClient = estoqueWebClient;
         this.clienteWebClient = clienteWebClient;
     }
 
+//    @CircuitBreaker(name = "estoque")
+////    @Retry(name = "retryEstoque", fallbackMethod = "fallbackEstoque")
+//    @Bulkhead(name = "bulkHeadEstoque", type = Bulkhead.Type.SEMAPHORE)
     public VendaDto save(Venda venda) {
         venda.setDataCriacao(LocalDateTime.now());
         venda.setStatus(Status.PENDENTE);
@@ -44,7 +58,9 @@ public class VendaService {
             }
             venda.setValorTotal(venda.getValorTotal() + item.getValorParcial());
         });
+
         Venda vendaSalva = repository.save(venda);
+
         return new VendaDto(
                 vendaSalva.getId(),
                 clienteDTO,
@@ -56,17 +72,36 @@ public class VendaService {
         );
     }
 
+    @CircuitBreaker(name = "usuarioService", fallbackMethod = "fallbackUsuarioService")
+    @Retry(name = "retryUsuarioService", fallbackMethod = "fallbackUsuarioService")
+    @Bulkhead(name = "bulkHeadUsuarioService", type = Bulkhead.Type.SEMAPHORE, fallbackMethod = "fallbackUsuarioService")
     private ClienteDTO validarCliente(Long userId) {
-        if(!clienteWebClient.clienteExiste(userId)) {
-            throw new BadRequestException("Usuário invalido!");
+        try {
+            if(!clienteWebClient.clienteExiste(userId)) {
+                throw new BadRequestException("Usuário invalido!");
+            }
+            Optional<ClienteDTO> clienteDTO = clienteWebClient.getClienteById(userId);
+            if (clienteDTO.isEmpty()) {
+                throw new BadRequestException("Erro ao buscar informações do usuário de id "+ userId);
+            }
+            CLIENTECACHE.put(userId, clienteDTO.get());
+            return clienteDTO.get();
+        } catch (FeignException.BadRequest badRequest) {
+            throw new BadRequestException(badRequest.getMessage());
         }
-        Optional<ClienteDTO> clienteDTO = clienteWebClient.getClienteById(userId);
-        if (clienteDTO.isEmpty()) {
-            throw new BadRequestException("Erro ao buscar informações do usuário de id "+ userId);
-        }
-        return clienteDTO.get();
     }
 
+    public ClienteDTO fallbackUsuarioService(Long userId, Throwable t) {
+        ClienteDTO clienteDTO = CLIENTECACHE.getOrDefault(userId, null);
+        if (clienteDTO != null) {
+            logger.log(Level.INFO, "Adicionando cliente do cache local");
+            return clienteDTO;
+        }
+        else throw new NotFoundException("Erro ao buscar informações do usuário");
+    }
+
+//    @CircuitBreaker(name = "estoque")
+//    @Bulkhead(name = "bulkHeadEstoque", type = Bulkhead.Type.SEMAPHORE)
     public Venda update(Venda venda) {
         if (venda.getId() == null) {
             throw new BadRequestException("Número do pedido não informado!");
@@ -78,8 +113,8 @@ public class VendaService {
                             item.getCodigoProduto(),
                             item.getQuantidade()
                     );
-                } catch (BadRequestException e) {
-                    System.out.println(e.getMessage());
+                } catch (FeignException.BadRequest e) {
+                   throw new BadRequestException(e.getMessage());
                 }
             });
         }
@@ -87,6 +122,10 @@ public class VendaService {
         return repository.save(venda);
     }
 
+    @CircuitBreaker(name = "estoque", fallbackMethod = "fallbackVenda")
+    @Retry(name = "retryEstoque", fallbackMethod = "fallbackVenda")
+    @Bulkhead(name = "bulkHeadEstoque", type = Bulkhead.Type.SEMAPHORE, fallbackMethod = "fallbackVenda")
+    @Transactional
     public VendaDto getById(Long id) {
         Optional<Venda> vendaOptional = repository.findById(id);
         if (vendaOptional.isEmpty()) {
@@ -94,7 +133,7 @@ public class VendaService {
         } else {
             ClienteDTO clienteDTO = validarCliente(vendaOptional.get().getUserId());
 
-            return new VendaDto(
+            VendaDto vendaDto = new VendaDto(
                     vendaOptional.get().getId(),
                     clienteDTO,
                     vendaOptional.get().getDataCriacao(),
@@ -103,6 +142,18 @@ public class VendaService {
                     vendaOptional.get().getStatus(),
                     vendaOptional.get().getItensVenda()
             );
+            logger.log(Level.INFO, "Adicionando pedido ao cache local");
+            VENDASCACHE.put(id, vendaDto);
+            return vendaDto;
         }
+    }
+
+    public VendaDto fallbackVenda(Long id, Throwable t) {
+        VendaDto vendaDto = VENDASCACHE.getOrDefault(id, null);
+        if (vendaDto != null) {
+            logger.log(Level.INFO, "Pegando pedido do cache");
+            return vendaDto;
+        }
+        throw new NotFoundException("Pedido de número "+ id+ " não foi encontrado!");
     }
 }
