@@ -5,55 +5,6 @@ spring:
     active: ${PROFILE:dev}
   config:
     import: optional:configserver:${CONFIG_SERVER_URI:http://localhost:8888}
-resilience4j:
-  circuitbreaker:
-      instances:
-        estoque:
-          register-health-indicator: true
-          wait-duration-in-open-state:
-            seconds: 10
-          record-exceptions:
-            - feign.FeignException.ServiceUnavailable
-            - feign.FeignException.InternalServerError
-            - java.util.concurrent.TimeoutException
-            - java.io.IOException
-            - feign.FeignException.FeignServerException
-            - org.springframework.web.client.ResourceAccessException
-        usuarioService:
-          register-health-indicator: true
-          wait-duration-in-open-state:
-            seconds: 5
-          record-exceptions:
-            - feign.FeignException.ServiceUnavailable
-            - feign.FeignException.InternalServerError
-            - java.util.concurrent.TimeoutException
-            - java.io.IOException
-            - feign.FeignException.FeignServerException
-            - org.springframework.web.client.ResourceAccessException
-  bulkhead:
-    instances:
-      bulkHeadEstoque:
-        max-wait-duration:
-          seconds: 0.002
-        max-concurrent-calls: 20
-      bulkHeadUsuarioService:
-        max-wait-duration:
-          seconds: 0.002
-        max-concurrent-calls: 50
-  retry:
-    instances:
-      retryEstoque:
-        max-attempts: 10
-        wait-duration:
-          seconds: 10
-        retry-exceptions:
-          - java.util.concurrent.TimeoutException
-      retryUsuarioService:
-        max-attempts: 10
-        wait-duration:
-          seconds: 10
-        retry-exceptions:
-          - java.util.concurrent.TimeoutException
 management:
   endpoints:
     web:

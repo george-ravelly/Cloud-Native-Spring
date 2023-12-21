@@ -6,6 +6,7 @@ import ufrn.sistemasdistribuidos.catalogo.dto.MarcaDTO;
 import ufrn.sistemasdistribuidos.catalogo.dto.ProdutoDTO;
 import ufrn.sistemasdistribuidos.catalogo.exceptions.BadRequestException;
 import ufrn.sistemasdistribuidos.catalogo.exceptions.NotFoundException;
+import ufrn.sistemasdistribuidos.catalogo.produto.service.ProdutoEventGateway;
 
 import java.time.LocalDateTime;
 import java.util.List;
