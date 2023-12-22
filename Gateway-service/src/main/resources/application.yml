@@ -12,14 +12,14 @@ spring:
           enabled: true
           lower-case-service-id: true
       default-filters:
-        - name: CircuitBreaker
-          args:
-            name: requestcircuitbreaker
-            timeout:
-            slidingWindowSize: 100
-            permittedNumberOfCallsInHalfOpenState: 20
-            failureRateThreshold: 50
-            waitDurationInOpenState: 5000
+#        - name: CircuitBreaker
+#          args:
+#            name: requestcircuitbreaker
+#            timeout:
+#            slidingWindowSize: 100
+#            permittedNumberOfCallsInHalfOpenState: 20
+#            failureRateThreshold: 50
+#            waitDurationInOpenState: 5000
         - name: Retry
           args:
             retries: 10
