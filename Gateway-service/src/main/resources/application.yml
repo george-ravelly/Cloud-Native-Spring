@@ -15,6 +15,7 @@ spring:
         - name: CircuitBreaker
           args:
             name: requestcircuitbreaker
+            timeout:
             slidingWindowSize: 100
             permittedNumberOfCallsInHalfOpenState: 20
             failureRateThreshold: 50

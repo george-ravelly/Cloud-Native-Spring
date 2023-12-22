@@ -7,4 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface VendaRepository extends JpaRepository<Venda, Long> {
+    Venda getVendaByUserId(Long id);
 }

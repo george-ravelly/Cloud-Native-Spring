@@ -88,4 +88,17 @@ public class ItemVenda {
     public void setValorParcial(double valorParcial) {
         this.valorParcial = valorParcial;
     }
+
+    @Override
+    public String toString() {
+        return "ItemVenda{" +
+                "id=" + id +
+                ", dataCriacao=" + dataCriacao +
+                ", dataModificacao=" + dataModificacao +
+                ", quantidade=" + quantidade +
+                ", valorParcial=" + valorParcial +
+                ", codigoProduto=" + codigoProduto +
+                ", venda=" + venda +
+                '}';
+    }
 }

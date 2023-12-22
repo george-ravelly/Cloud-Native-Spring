@@ -16,7 +16,7 @@ public class ProdutoEventGatewayStreamBridge implements ProdutoEventGateway {
     @Override
     public void sendProdutoCodeEvent(String code) {
         streamBridge.send(
-                "criar.estoque.produto.entrada",
+                ApiProperties.SEND_ESTOQUE_NOVO_PRODUTO.getBinding(),
                 code
         );
         System.out.println("enviando message to " + ApiProperties.SEND_ESTOQUE_NOVO_PRODUTO.getBinding());

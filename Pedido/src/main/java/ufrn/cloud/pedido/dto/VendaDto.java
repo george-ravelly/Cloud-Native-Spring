@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record VendaDto(
-        Long id,
+        long id,
         ClienteDTO cliente,
         LocalDateTime dataCriacao,
         LocalDateTime dataModificacao,
         double valorTotal,
         Status status,
         List<ItemVenda> itensVenda
-) implements Serializable {
+) {
 }

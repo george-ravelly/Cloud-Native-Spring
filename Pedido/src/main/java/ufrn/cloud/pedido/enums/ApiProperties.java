@@ -1,7 +1,8 @@
-package ufrn.sistemasdistribuidos.catalogo.enums;
+package ufrn.cloud.pedido.enums;
 
 public enum ApiProperties {
-    SEND_ESTOQUE_NOVO_PRODUTO("criar.estoque.produto.entrada");
+    SEND_VALIDAR_CLIENTE("cliente.valido.entrada"),
+    SEND_VALIDAR_ATUALIZAR_ESTOQUE_PRODUTO("validar.atualizar.estoque.venda.entrada");
 
     private String binding;
 
