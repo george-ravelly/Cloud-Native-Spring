@@ -12,13 +12,19 @@ spring:
           enabled: true
           lower-case-service-id: true
       default-filters:
-        - name: CircuitBreaker
-          args:
-            name: requestcircuitbreaker
-            slidingWindowSize: 100
-            permittedNumberOfCallsInHalfOpenState: 20
-            failureRateThreshold: 50
-            waitDurationInOpenState: 5000
+#        - name: CircuitBreaker
+#          args:
+#            name: requestcircuitbreaker
+#            slidingWindowSize: 20
+#            permittedNumberOfCallsInHalfOpenState: 5
+#            waitDurationInOpenState: 10000
+#            recordExceptions:
+#              - feign.FeignException.ServiceUnavailable
+#              - feign.FeignException.InternalServerError
+#              - java.util.concurrent.TimeoutException
+#              - java.io.IOException
+#              - feign.FeignException.FeignServerException
+#              - org.springframework.web.client.ResourceAccessException
         - name: Retry
           args:
             retries: 10
