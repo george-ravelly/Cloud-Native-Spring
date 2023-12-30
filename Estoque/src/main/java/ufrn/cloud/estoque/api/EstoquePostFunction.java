@@ -25,7 +25,7 @@ public class EstoquePostFunction {
             Estoque estoque = new Estoque();
             estoque.setCodigoProduto(Long.parseLong(codigo));
             estoque.setQuantidade(0);
-            System.out.println(estoque);
+
             return estoqueService.save(estoque);
         };
     }

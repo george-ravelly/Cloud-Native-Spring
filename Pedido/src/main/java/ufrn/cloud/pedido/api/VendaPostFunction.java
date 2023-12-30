@@ -12,6 +12,7 @@ import ufrn.cloud.pedido.venda.Venda;
 import ufrn.cloud.pedido.venda.VendaRepository;
 
 import java.time.LocalDateTime;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Component
@@ -39,6 +40,10 @@ public class VendaPostFunction {
                     venda.getUserId(),
                     venda.getId()
             ));
+            eventGateway.sendVendaToValidationOfEstoqueProdutcs(new ItensVendaDTO(
+                    venda.getId(),
+                    venda.getItensVenda()
+            ));
             return venda1;
         };
     }
@@ -47,12 +52,6 @@ public class VendaPostFunction {
     public Function<Venda, Venda> updateVenda() {
         return venda -> {
             venda.setDataModificacao(LocalDateTime.now());
-            if (venda.getStatus() == Status.PROCESSANDO) {
-                eventGateway.sendVendaToValidationOfEstoqueProdutcs(new ItensVendaDTO(
-                        venda.getId(),
-                        venda.getItensVenda()
-                ));
-            }
             return vendaRepository.save(venda);
         };
     }
@@ -61,11 +60,15 @@ public class VendaPostFunction {
     public Function<String, String> cancelarVenda() {
         return vendaId -> {
             if (vendaId.isEmpty()) return "";
-            Venda venda = vendaRepository.findById(Long.parseLong(vendaId)).orElseThrow(NotFoundException::new);
-            vendaRepository.delete(venda);
-            venda.setId(null);
-            vendaRepository.save(venda);
-            System.out.println("Venda cancelada: " + venda.getId());
+            Venda venda = vendaRepository.findById(Long.parseLong(vendaId))
+                    .orElseThrow(() -> new NotFoundException("Pedido " + vendaId + " não encontrado!"));
+            if (venda.getStatus() == Status.CANCELADO) return "";
+//            vendaRepository.delete(venda);
+//            venda.setId(null);
+//            venda.setId(Long.parseLong(vendaId));
+            venda.setStatus(Status.CANCELADO);
+            var r = vendaRepository.save(venda);
+            System.out.println("Venda cancelada: " + venda.getId() + " " + r.getId());
             return "Venda cancelada!";
         };
     }

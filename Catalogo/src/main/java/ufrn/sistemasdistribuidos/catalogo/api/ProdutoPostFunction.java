@@ -24,7 +24,6 @@ public class ProdutoPostFunction {
     @Bean
     public Function<Produto, ProdutoDTO> criarProduto() {
         return produto -> {
-            System.out.println(produto.getNome());
             Produto produtoSalvo = produtoService.save(produto);
             eventGateway.sendProdutoCodeEvent(produtoSalvo.getCod().toString());
             return new ProdutoDTO(
